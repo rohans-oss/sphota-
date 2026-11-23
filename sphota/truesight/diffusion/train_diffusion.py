@@ -140,6 +140,9 @@ def train_diffusion(codec_path, out, iters=200_000, batch=32, crop=128, lr=1e-4,
         _atomic_save({"unet": unet.state_dict(), "ema": ema.state_dict(), "step": step, "config": cfg}, out / f"snapshot_{step}.pt")
         print(f"snapshot_{step}.pt written", flush=True)
 
+    if step > 0 and snaps and not any(out.glob("snapshot_*.pt")):  # resuming a run that has no snapshot yet: keep its state as it is now
+        snapshot()                                                 # (e.g. the ~30k model, before a shorter total changes the LR schedule)
+
     def save():                                                    # reads the loop's current ``step`` and weights
         _atomic_save({"unet": unet.state_dict(), "ema": ema.state_dict(), "opt": opt.state_dict(),
                       "scaler": scaler.state_dict(), "step": step, "config": cfg}, last)

@@ -249,3 +249,15 @@ def test_ablation_runner_evaluates_the_half_budget_checkpoint_too(tmp_path):
     by = pd.read_csv(out / "summary_by_step.csv")
     assert sorted(by.step.unique()) == [2, 4] and set(by.run) == {"base", "adam"}      # 4 = final (snapshot 4 is the final.pt step)
     assert (out / "base" / "snapshot_2.pt").exists() and (out / "summary_2.csv").exists() and (out / "summary.csv").exists()
+
+
+def test_resume_without_any_snapshot_keeps_the_resumed_state_as_a_snapshot(tmp_path):
+    lst = _images(tmp_path)
+    codec_path, _ = _codec_ckpt(tmp_path)
+    run = tmp_path / "run"
+    kw = dict(codec_path=codec_path, out=run, batch=2, crop=64, channels=SMALL, T=100, warmup=2, ckpt_every=2,
+              log_every=2, workers=0, train_list=lst, device="cpu")
+    train_diffusion(iters=8, stop_at=3, **kw)                                  # an old run, started before snapshots existed
+    assert not list(run.glob("snapshot_*.pt"))
+    train_diffusion(iters=6, snapshots=(6,), **kw)                             # resumed with a shorter total
+    assert torch.load(run / "snapshot_3.pt")["step"] == 3 and (run / "snapshot_6.pt").exists()
