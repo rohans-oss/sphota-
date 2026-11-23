@@ -194,3 +194,58 @@ def test_summary_and_checks():
     assert c["lpips_reduction_pct"] == pytest.approx(27.5) and c["lpips_target_met"] and c["fid_beats_jpeg_webp_coarse"]
     assert not checks(s, {"diffusion": 130.0, "jpeg": 120.0, "coarse": 150.0})["fid_beats_jpeg_webp_coarse"]
     assert "| method |" in fmt_table(s) and "0.2900" in fmt_table(s)
+
+
+# --------------------------------------------------------------------------- snapshots and the checkpoint comparison
+def test_snapshots_are_kept_beside_last_and_survive_a_resume_with_a_new_total(tmp_path):
+    lst = _images(tmp_path)
+    codec_path, _ = _codec_ckpt(tmp_path)
+    run = tmp_path / "run"
+    kw = dict(codec_path=codec_path, out=run, batch=2, crop=64, channels=SMALL, T=100, warmup=2, ckpt_every=2,
+              log_every=2, workers=0, train_list=lst, device="cpu")
+    train_diffusion(iters=8, stop_at=4, snapshots=(2, 4, 8), **kw)             # "30k" of a longer run
+    assert (run / "snapshot_2.pt").exists() and (run / "snapshot_4.pt").exists() and not (run / "snapshot_8.pt").exists()
+    train_diffusion(iters=6, snapshots=(2, 4, 6), **kw)                         # resume and shorten the total: cosine now ends at 6
+    assert (run / "snapshot_6.pt").exists() and (run / "final.pt").exists()
+    s = torch.load(run / "snapshot_4.pt")
+    assert set(s) == {"unet", "ema", "step", "config"} and s["step"] == 4
+    assert load_unet(run / "snapshot_4.pt")[1]["T"] == 100
+
+
+def test_compare_checkpoints_reports_codec_only_and_every_checkpoint(tmp_path):
+    import importlib.util
+    from pathlib import Path
+    spec = importlib.util.spec_from_file_location("cmp_ck", Path(__file__).resolve().parents[1] / "scripts" / "compare_checkpoints.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    from truesight.codec.train_codec import load_codec
+    lst = _images(tmp_path, n=3, size=64)
+    codec_path, _ = _codec_ckpt(tmp_path)
+    run = tmp_path / "run"
+    train_diffusion(codec_path=codec_path, out=run, iters=4, batch=2, crop=64, channels=SMALL, T=50, warmup=1, ckpt_every=2,
+                    log_every=2, workers=0, train_list=lst, device="cpu", snapshots=(2,))
+    codec, _ = load_codec(codec_path, torch.device("cpu"))
+    files = open(lst).read().split()
+    per, summ = mod.compare(codec, [run / "snapshot_2.pt", run / "final.pt"], files, steps=2, images=3, crop=64)
+    assert summ.checkpoint.tolist() == ["codec only (no diffusion)", "step 2", "step 4"]
+    assert {"lpips_change_vs_first", "ci95_low", "ci95_high"} <= set(summ.columns) and len(per) == 6
+    assert summ.loc[2, "ci95_low"] <= summ.loc[2, "lpips_change_vs_first"] <= summ.loc[2, "ci95_high"]
+
+
+def test_ablation_runner_evaluates_the_half_budget_checkpoint_too(tmp_path):
+    import subprocess
+    import sys
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    lst = _images(tmp_path, n=3, size=64)
+    codec_path, _ = _codec_ckpt(tmp_path)
+    out = tmp_path / "abl"
+    r = subprocess.run([sys.executable, str(root / "scripts" / "run_train_ablations.py"), "--codec", codec_path, "--out", str(out),
+                        "--runs", "base", "adam", "--iters", "4", "--snapshots", "2", "4", "--batch", "2", "--crop", "64",
+                        "--channels", *map(str, SMALL), "--workers", "0", "--ckpt-every", "2", "--train-list", lst,
+                        "--test-list", lst, "--eval-images", "2", "--eval-crop", "64", "--steps", "2", "--device", "cpu"],
+                       capture_output=True, text=True, cwd=root)
+    assert r.returncode == 0, r.stderr[-1500:]
+    by = pd.read_csv(out / "summary_by_step.csv")
+    assert sorted(by.step.unique()) == [2, 4] and set(by.run) == {"base", "adam"}      # 4 = final (snapshot 4 is the final.pt step)
+    assert (out / "base" / "snapshot_2.pt").exists() and (out / "summary_2.csv").exists() and (out / "summary.csv").exists()

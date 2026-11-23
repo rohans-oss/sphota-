@@ -4,6 +4,10 @@
     python scripts/run_train_ablations.py --codec ... --iters 200 --batch 4 --channels 16 32 32 32 --workers 0 --crop 64 \
                                           --eval-images 2 --eval-crop 128 --steps 4                       # CPU smoke run
 
+With --snapshots 2500 5000 every run also keeps snapshot_2500.pt (and snapshot_5000.pt when below --iters) and is evaluated at each
+checkpoint: the tables then show whether the ranking of the four variants is already visible at half the budget. results of the
+intermediate checkpoints go to eval_<step>.csv, summary_<step>.csv and summary_by_step.csv / .json (one row per run and step).
+
 Trains the reference run (cosine schedule, AdamW, cosine LR) and three variants that each change one thing, all with the same
 number of iterations (--iters, default 20,000: much shorter than the 200k-step main run, so absolute numbers are worse than
 the main model; only the comparison between the four matters), then decodes the same Kodak images with each model and writes
@@ -41,6 +45,7 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--ckpt-every", type=int, default=2000)
     ap.add_argument("--train-list", default=None)
+    ap.add_argument("--snapshots", type=int, nargs="*", default=[], help="also keep and evaluate checkpoints at these steps (e.g. 2500)")
     ap.add_argument("--test-list", default=str(PROC / "test_kodak.txt"))
     ap.add_argument("--eval-images", type=int, default=24)
     ap.add_argument("--eval-crop", type=int, default=None, help="centre-crop the evaluation images (CPU runs)")
@@ -53,26 +58,53 @@ def main():
     codec, _ = load_codec(a.codec, dev)
     files = read_list(a.test_list)
     results, tails = {}, {}
+    steps_eval = sorted({int(v) for v in a.snapshots if 0 < int(v) < a.iters})        # intermediate checkpoints; the last one is final.pt
+    per_step = {st: {} for st in steps_eval}
     for name in a.runs:
         _, kw = ABLATIONS[name]
         d = out / name
         if not (d / "final.pt").exists():
             print(f"=== training {name} ({ABLATIONS[name][0]}): {kw or 'reference'}", flush=True)
             train_diffusion(a.codec, d, iters=a.iters, batch=a.batch, crop=a.crop, channels=tuple(a.channels),
-                            workers=a.workers, ckpt_every=a.ckpt_every, train_list=a.train_list, **kw)
+                            workers=a.workers, ckpt_every=a.ckpt_every, train_list=a.train_list, snapshots=steps_eval, **kw)
         unet, ucfg = load_unet(d / "final.pt", dev)
         sched = Schedule(ucfg["T"], ucfg["kind"], device=dev)
         df = evaluate_unet(unet, sched, codec, files, steps=a.steps, w=a.w, device=dev, max_images=a.eval_images,
                            crop=a.eval_crop)
         df.insert(0, "run", name); df.to_csv(d / "eval.csv", index=False)
         results[name], tails[name] = df, train_loss_tail(d / "log.csv")
-        print(f"{name}: LPIPS {df.lpips.mean():.4f} PSNR {df.psnr.mean():.2f}", flush=True)
+        print(f"{name} @ {a.iters}: LPIPS {df.lpips.mean():.4f} PSNR {df.psnr.mean():.2f}", flush=True)
+        for st in steps_eval:
+            snap = d / f"snapshot_{st}.pt"
+            if not snap.exists():
+                print(f"{name}: {snap.name} missing, skipped", flush=True)
+                continue
+            u, uc = load_unet(snap, dev)
+            ds = evaluate_unet(u, Schedule(uc["T"], uc["kind"], device=dev), codec, files, steps=a.steps, w=a.w, device=dev,
+                               max_images=a.eval_images, crop=a.eval_crop)
+            ds.insert(0, "run", name); ds.to_csv(d / f"eval_{st}.csv", index=False)
+            per_step[st][name] = ds
+            print(f"{name} @ {st}: LPIPS {ds.lpips.mean():.4f} PSNR {ds.psnr.mean():.2f}", flush=True)
     pd.concat(results.values(), ignore_index=True).to_csv(out / "results.csv", index=False)
     summ = summarize_ablations(results)
     summ["train_loss_tail"] = summ["run"].map(tails)
     summ.to_csv(out / "summary.csv", index=False)
     (out / "summary.json").write_text(json.dumps(summ.to_dict("records"), indent=2, default=float))
     print(summ.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
+    if steps_eval:                                                  # the same tables at the intermediate checkpoints
+        rows = []
+        for st, res in sorted(per_step.items()):
+            if not res:
+                continue
+            ss = summarize_ablations(res)
+            ss.to_csv(out / f"summary_{st}.csv", index=False)
+            rows.append(ss.assign(step=st))
+        rows.append(summ.drop(columns=["train_loss_tail"]).assign(step=a.iters))
+        every = pd.concat(rows, ignore_index=True)
+        every.to_csv(out / "summary_by_step.csv", index=False)
+        (out / "summary_by_step.json").write_text(json.dumps(every.to_dict("records"), indent=2, default=float))
+        print("\nLPIPS by checkpoint (is the ranking at the half budget the same as at the end?):")
+        print(every.pivot(index="run", columns="step", values="lpips").to_string(float_format=lambda v: f"{v:.4f}"))
 
 
 if __name__ == "__main__":

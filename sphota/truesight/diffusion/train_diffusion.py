@@ -79,8 +79,9 @@ def load_unet(path, device="cpu", use_ema=True):
 def train_diffusion(codec_path, out, iters=200_000, batch=32, crop=128, lr=1e-4, weight_decay=1e-4, warmup=2000,
                     ema_decay=0.999, p_drop=0.1, channels=CHANNELS, T=1000, kind="cosine", clip=1.0, ckpt_every=5000,
                     log_every=100, workers=4, seed=0, train_list=None, device=None, amp=None, stop_at=None,
-                    optimizer="adamw", lr_schedule="cosine"):
-    """Train (or resume) the conditional decoder. ``stop_at`` stops early after saving, used to test resume.
+                    optimizer="adamw", lr_schedule="cosine", snapshots=()):
+    """Train (or resume) the conditional decoder. ``snapshots`` = steps at which a permanent snapshot_<step>.pt (same format as
+    final.pt: raw + EMA weights) is written beside last.pt, so intermediate quality can be measured later (e.g. 30k and 60k of a run). ``stop_at`` stops early after saving, used to test resume.
     ``kind`` (noise schedule), ``optimizer`` ("adamw" | "adam") and ``lr_schedule`` ("cosine" | "constant") are the three
     settings of ablations A7 / A8. Raises ``runtime.Paused`` after saving when the session time budget is used up, and writes
     last.pt before re-raising if anything crashes, so the run always continues from where it stopped."""
@@ -133,6 +134,11 @@ def train_diffusion(codec_path, out, iters=200_000, batch=32, crop=128, lr=1e-4,
     unet.train()
     t0, stop = time.time(), (iters if stop_at is None else min(iters, stop_at))
     guard = runtime.guard()
+    snaps = {int(v) for v in snapshots}
+
+    def snapshot():
+        _atomic_save({"unet": unet.state_dict(), "ema": ema.state_dict(), "step": step, "config": cfg}, out / f"snapshot_{step}.pt")
+        print(f"snapshot_{step}.pt written", flush=True)
 
     def save():                                                    # reads the loop's current ``step`` and weights
         _atomic_save({"unet": unet.state_dict(), "ema": ema.state_dict(), "opt": opt.state_dict(),
@@ -171,6 +177,8 @@ def train_diffusion(codec_path, out, iters=200_000, batch=32, crop=128, lr=1e-4,
                 print(f"step {step}/{iters} loss {loss.item():.4f} lr {cur_lr:.2e} {time.time() - t0:.0f}s "
                       f"data-wait {meter.fraction():.0%}", flush=True)
                 meter.reset()
+            if step in snaps:
+                snapshot()
             if step % ckpt_every == 0 or step == stop or guard.save_due():
                 save()
             if step < stop:
@@ -201,11 +209,12 @@ def main():
     ap.add_argument("--ckpt-every", type=int, default=5000)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--train-list", default=None)
+    ap.add_argument("--snapshots", type=int, nargs="*", default=[], help="steps at which to keep a snapshot_<step>.pt (e.g. 30000 60000)")
     a = ap.parse_args()
     train_diffusion(a.codec, a.out, iters=a.iters, batch=a.batch, crop=a.crop, lr=a.lr, warmup=a.warmup,
                     ema_decay=a.ema, p_drop=a.p_drop, channels=tuple(a.channels), T=a.T, kind=a.schedule,
                     ckpt_every=a.ckpt_every, workers=a.workers, seed=a.seed, train_list=a.train_list,
-                    optimizer=a.optimizer, lr_schedule=a.lr_schedule)
+                    optimizer=a.optimizer, lr_schedule=a.lr_schedule, snapshots=a.snapshots)
 
 
 if __name__ == "__main__":

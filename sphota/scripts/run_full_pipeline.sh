@@ -61,6 +61,19 @@ else
   U_IT=20000;  U_BATCH=64;  U_CH="64 128 128 256"; ABL_IT=20000; ABL_BATCH=32; ABL_CH="64 128 256 256"
   N_IMG=500;   N_TEXT=300; N_FACE=500; N_TBL=1500; N_HALL=100; TUNE_N=20; STUDY_IMG=40; CR_MAX=2000; CR_PER=20; CR_BATCH=16; CR_STEPS=$MAIN_STEPS
 fi
+D_SNAP=""; ABL_SNAP=""                                              # steps at which a snapshot_<step>.pt is kept and compared
+# TS_BUDGET=24h: the whole pipeline in about 24 GPU-hours on two T4s. NOTHING is removed: every stage, ablation and evaluation still
+# runs. Only the number of diffusion iterations (200k -> 60k, LR cosine-decayed to 0 at 60k), the ablation runs (20k -> 5k) and the
+# evaluation sample counts shrink. Snapshots at 30k / 60k (main model) and 2.5k / 5k (ablations) show what the extra steps would buy
+# (scripts/compare_checkpoints.py). Any single value can still be overridden: TS_D_IT, TS_ABL_IT, TS_D_SNAPSHOTS, TS_ABL_SNAPSHOTS.
+if [ "${SMOKE:-0}" != "1" ] && [ "${TS_BUDGET:-}" = "24h" ]; then
+  D_IT=60000; ABL_IT=5000; D_SNAP="30000 60000"; ABL_SNAP="2500 5000"
+  N_IMG=200; CR_MAX=500; N_TBL=600; CR_STEPS=$MAIN_STEPS
+fi
+[ -n "${TS_D_IT:-}" ] && D_IT=$TS_D_IT
+[ -n "${TS_ABL_IT:-}" ] && ABL_IT=$TS_ABL_IT
+[ -n "${TS_D_SNAPSHOTS:-}" ] && D_SNAP=$TS_D_SNAPSHOTS
+[ -n "${TS_ABL_SNAPSHOTS:-}" ] && ABL_SNAP=$TS_ABL_SNAPSHOTS
 mkdir -p "$EXP/.done" "$EXP/logs" "$FIGS" "$RES"
 # Speed-ups that are used only after a parity check passed (they read these result files; without them everything stays fp32 as in the
 # guide): fp16 codec convolutions after `STAGES=amp_parity` (scripts/amp_parity.py), fp16 / batched U-Net decoding after the eval_parity stage.
@@ -181,7 +194,8 @@ stage_diffusion() {
   if want diffusion; then                                         # Step 10: conditional decoder on the lowest-lambda codec
     require "$LO" codec
     run diffusion $PY -m truesight.diffusion.train_diffusion --codec "$LO" --out "$DIFF" \
-        --iters $D_IT --batch $D_BATCH --crop $D_CROP --channels $D_CH --workers $WORKERS
+        --iters $D_IT --batch $D_BATCH --crop $D_CROP --channels $D_CH --workers $WORKERS \
+        ${D_SNAP:+--snapshots $D_SNAP}
     done_ diffusion
   fi
 }
@@ -297,7 +311,8 @@ stage_train_ablations() {
   if want train_ablations; then                                   # A7 (linear vs cosine schedule) and A8 (Adam vs AdamW, constant vs cosine LR)
     require "$LO" codec
     run train_ablations $PY scripts/run_train_ablations.py --codec "$LO" --out "$EXP/step10_ablation" --iters $ABL_IT \
-        --batch $ABL_BATCH --channels $ABL_CH --workers $WORKERS --device $DEV --steps $STEPS
+        --batch $ABL_BATCH --channels $ABL_CH --workers $WORKERS --device $DEV --steps $STEPS \
+        ${ABL_SNAP:+--snapshots $ABL_SNAP}
     done_ train_ablations
   fi
 }
