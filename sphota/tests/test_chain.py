@@ -460,3 +460,9 @@ def test_a_cancelled_session_is_settled_from_its_heartbeat_or_the_dead_hours_set
     b2, _ = kaggle.plan_budget(11.5, weekly_quota=30, entries=[{"start": now - 3 * day, "reserved_h": 11.5, "hours_used": 11.4},
                                                              cancelled_old], now=now)
     assert b2 == pytest.approx(30 - 11.4 - 11.5 - 0.5)                                                                   # without the setting: 6.6 h
+
+
+def test_generated_cell_finds_the_driver_in_a_sphota_subfolder_and_carries_the_budget_flag():
+    src = chain.run_source("https://github.com/u/repo.git", ["--sync", "hf:u/r", "--budget", "24h"])
+    compile(src, "cell", "exec")                                              # valid Python
+    assert "/sphota/scripts/kaggle_run.py" in src and "--budget" in src and "24h" in src

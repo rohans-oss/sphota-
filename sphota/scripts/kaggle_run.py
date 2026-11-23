@@ -39,6 +39,8 @@ def main():
     ap.add_argument("--data-input", default=None, help="folder of an attached Kaggle dataset containing raw/ (and processed/)")
     ap.add_argument("--data-dir", default=None, help="roomy scratch folder to use as data/ (Kaggle: /kaggle/temp/sphota_data)")
     ap.add_argument("--stages", default=None, help='only these stages, for example "diffusion diffusion_eval"')
+    ap.add_argument("--budget", choices=["24h"], default=None, help="24h = fit the run into about 24 GPU-hours (60k diffusion steps, 5k ablations, "
+                    "fewer evaluation samples, snapshots for comparison; see BUDGET_24H.md). Part of the arguments of chained notebooks, so every session uses it")
     ap.add_argument("--smoke", action="store_true", help="tiny settings (same commands, minutes instead of days)")
     ap.add_argument("--sync-every", type=float, default=kaggle.DEFAULT_SYNC_MIN, help="minutes between uploads while running (checkpoints are written more often)")
     ap.add_argument("--quota-hours", type=float, default=None, help="hours of GPU quota the Kaggle page shows as left RIGHT NOW; the session budget becomes this minus 0.5 h")
@@ -80,6 +82,8 @@ def main():
     env = {}
     if a.stages:
         env["STAGES"] = a.stages
+    if a.budget:
+        env["TS_BUDGET"] = a.budget
     if a.smoke:
         env["SMOKE"] = "1"
     if a.claims:

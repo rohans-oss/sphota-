@@ -93,7 +93,10 @@ def run_source(repo, argv):
         "    subprocess.run(['git', '-C', DIR, 'pull', '--ff-only'], check=False)\n"
         "else:\n"
         "    subprocess.run(['git', 'clone', REPO, DIR], check=True)\n"
-        "sys.exit(subprocess.run([sys.executable, DIR + '/scripts/kaggle_run.py'] + ARGS).returncode)\n")
+        "SCRIPT = DIR + '/scripts/kaggle_run.py'\n"
+        "if not os.path.exists(SCRIPT):                      # the code may sit in a sphota/ folder of a larger repository\n"
+        "    SCRIPT = DIR + '/sphota/scripts/kaggle_run.py'\n"
+        "sys.exit(subprocess.run([sys.executable, SCRIPT] + ARGS).returncode)\n")
 
 
 def notebook_json(source):
