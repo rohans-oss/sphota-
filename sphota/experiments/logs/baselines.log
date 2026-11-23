@@ -1,0 +1,140 @@
+== kodak: 24 images
+/usr/local/lib/python3.13/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+  [kodak] 5/24 images  (36s)
+  [kodak] 10/24 images  (74s)
+  [kodak] 15/24 images  (112s)
+  [kodak] 20/24 images  (153s)
+  [kodak] 24/24 images  (187s)
+   JPEG size floor (kodak): 0.173 bpp mean (range 0.150-0.248) at quality 1
+   WebP size floor (kodak): 0.109 bpp mean
+== clic: 102 images
+  [clic] 5/102 images  (409s)
+  [clic] 10/102 images  (812s)
+  [clic] 15/102 images  (1181s)
+  [clic] 20/102 images  (1568s)
+  [clic] 25/102 images  (1899s)
+  [clic] 30/102 images  (2221s)
+  [clic] 35/102 images  (2499s)
+  [clic] 40/102 images  (2807s)
+  [clic] 45/102 images  (3233s)
+  [clic] 50/102 images  (3626s)
+  [clic] 55/102 images  (3863s)
+  [clic] 60/102 images  (4214s)
+  [clic] 65/102 images  (4557s)
+  [clic] 70/102 images  (5149s)
+  [clic] 75/102 images  (5740s)
+  [clic] 80/102 images  (6340s)
+  [clic] 85/102 images  (6925s)
+  [clic] 90/102 images  (7530s)
+  [clic] 95/102 images  (8138s)
+  [clic] 100/102 images  (8550s)
+  [clic] 102/102 images  (8666s)
+   JPEG size floor (clic): 0.155 bpp mean (range 0.130-0.234) at quality 1
+   WebP size floor (clic): 0.089 bpp mean
+saved 1890 rows -> /kaggle/working/sphota/experiments/step3_baselines/rd_results.csv
+/usr/local/lib/python3.13/dist-packages/sklearn/base.py:380: InconsistentVersionWarning: Trying to unpickle estimator PCA from version 1.9.1 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/sklearn/base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MiniBatchKMeans from version 1.9.1 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+PCA explained variance: {'components_for_90pct': 2, 'components_for_95pct': 6, 'components_for_99pct': 29, 'first_component_pct': 87.85206079483032, 'top8_pct': 95.85297107696533, 'top16_pct': 97.72005677223206}
+/usr/local/lib/python3.13/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+  1/24 kodim01.png
+  2/24 kodim02.png
+  3/24 kodim03.png
+  4/24 kodim04.png
+  5/24 kodim05.png
+  6/24 kodim06.png
+  7/24 kodim07.png
+  8/24 kodim08.png
+  9/24 kodim09.png
+  10/24 kodim10.png
+  11/24 kodim11.png
+  12/24 kodim12.png
+  13/24 kodim13.png
+  14/24 kodim14.png
+  15/24 kodim15.png
+  16/24 kodim16.png
+  17/24 kodim17.png
+  18/24 kodim18.png
+  19/24 kodim19.png
+  20/24 kodim20.png
+  21/24 kodim21.png
+  22/24 kodim22.png
+  23/24 kodim23.png
+  24/24 kodim24.png
+method  quality    bpp    psnr  msssim  lpips
+PCA-16    0.015 1.2916 29.9421  0.9826 0.1310
+PCA-16    0.030 0.9786 29.7255  0.9772 0.1497
+PCA-16    0.060 0.7051 29.1987  0.9652 0.1884
+PCA-16    0.125 0.4620 27.9923  0.9375 0.2581
+PCA-16    0.250 0.2770 25.9219  0.8893 0.3589
+PCA-16    0.500 0.1452 23.0529  0.8084 0.4997
+PCA-16    1.000 0.0648 20.5510  0.7280 0.6204
+PCA-64    0.015 3.1948 39.6136  0.9941 0.0129
+PCA-64    0.030 2.1902 37.2099  0.9877 0.0324
+PCA-64    0.060 1.3914 34.0767  0.9741 0.0815
+PCA-64    0.125 0.7648 30.3372  0.9440 0.1662
+PCA-64    0.250 0.3775 26.7397  0.8931 0.2986
+PCA-64    0.500 0.1659 23.2365  0.8100 0.4741
+PCA-64    1.000 0.0667 20.5766  0.7284 0.6144
+    VQ   16.000 0.1784 20.9253  0.7578 0.5716
+    VQ   64.000 0.2626 23.3157  0.8333 0.4585
+    VQ  256.000 0.3370 24.6339  0.8702 0.3857
+    VQ 1024.000 0.4157 25.8932  0.8969 0.3136
+BD-rate vs JPEG (PSNR, + = needs more bits): {'PCA-16': -6.2, 'PCA-64': 3.6, 'VQ': 29.4}
+cropping 5009 images (0 cached) -> 256x256 x 2
+  crops 300/5009
+  crops 600/5009
+  crops 900/5009
+  crops 1200/5009
+  crops 1500/5009
+  crops 1800/5009
+  crops 2100/5009
+  crops 2400/5009
+  crops 2700/5009
+  crops 3000/5009
+  crops 3300/5009
+  crops 3600/5009
+  crops 3900/5009
+  crops 4200/5009
+  crops 4500/5009
+  crops 4800/5009
+  crops 5009/5009
+crop rows for the size-aware variant: 10018 (256x256)
+fit images (train+val): 5009; test sets: {'test_clic': 102, 'test_face': 500, 'test_kodak': 24, 'test_text': 500}
+target log(JPEG q10 bpp): mean -1.23, std 0.33
+[guide (7 raw features)] Linear     nested-CV R2 = 0.9543 +- 0.0024 | held-out R2: {'test_clic': 0.9296, 'test_face': -4.6836, 'test_kodak': 0.9364, 'test_text': 0.9036} RMSE: {'test_clic': 0.0825, 'test_face': 0.2455, 'test_kodak': 0.0624, 'test_text': 0.0801}
+[guide (7 raw features)] Ridge      nested-CV R2 = 0.9543 +- 0.0024 | held-out R2: {'test_clic': 0.9296, 'test_face': -4.688, 'test_kodak': 0.9364, 'test_text': 0.9035} RMSE: {'test_clic': 0.0826, 'test_face': 0.2456, 'test_kodak': 0.0623, 'test_text': 0.0802}
+[guide (7 raw features)] Lasso      nested-CV R2 = 0.9543 +- 0.0024 | held-out R2: {'test_clic': 0.9295, 'test_face': -4.6692, 'test_kodak': 0.9365, 'test_text': 0.9036} RMSE: {'test_clic': 0.0826, 'test_face': 0.2452, 'test_kodak': 0.0623, 'test_text': 0.0801}
+[guide (7 raw features)] ElasticNet nested-CV R2 = 0.9543 +- 0.0024 | held-out R2: {'test_clic': 0.9295, 'test_face': -4.6722, 'test_kodak': 0.9365, 'test_text': 0.9036} RMSE: {'test_clic': 0.0826, 'test_face': 0.2453, 'test_kodak': 0.0623, 'test_text': 0.0801}
+[7 features, log1p on skewed] Linear     nested-CV R2 = 0.9760 +- 0.0017 | held-out R2: {'test_clic': 0.9606, 'test_face': -4.3366, 'test_kodak': 0.9664, 'test_text': 0.9339} RMSE: {'test_clic': 0.0618, 'test_face': 0.2379, 'test_kodak': 0.0453, 'test_text': 0.0663}
+[7 features, log1p on skewed] Ridge      nested-CV R2 = 0.9761 +- 0.0017 | held-out R2: {'test_clic': 0.9606, 'test_face': -4.334, 'test_kodak': 0.9664, 'test_text': 0.9339} RMSE: {'test_clic': 0.0618, 'test_face': 0.2379, 'test_kodak': 0.0453, 'test_text': 0.0663}
+[7 features, log1p on skewed] Lasso      nested-CV R2 = 0.9760 +- 0.0017 | held-out R2: {'test_clic': 0.9606, 'test_face': -4.341, 'test_kodak': 0.9664, 'test_text': 0.9339} RMSE: {'test_clic': 0.0618, 'test_face': 0.238, 'test_kodak': 0.0453, 'test_text': 0.0663}
+[7 features, log1p on skewed] ElasticNet nested-CV R2 = 0.9761 +- 0.0017 | held-out R2: {'test_clic': 0.9606, 'test_face': -4.3399, 'test_kodak': 0.9664, 'test_text': 0.9339} RMSE: {'test_clic': 0.0618, 'test_face': 0.238, 'test_kodak': 0.0453, 'test_text': 0.0663}
+[without jpeg50_bpp (6 features, log1p)] Linear     nested-CV R2 = 0.9739 +- 0.0017 | held-out R2: {'test_clic': 0.9613, 'test_face': -5.6812, 'test_kodak': 0.9621, 'test_text': 0.9298} RMSE: {'test_clic': 0.0612, 'test_face': 0.2662, 'test_kodak': 0.0481, 'test_text': 0.0684}
+[without jpeg50_bpp (6 features, log1p)] Ridge      nested-CV R2 = 0.9739 +- 0.0017 | held-out R2: {'test_clic': 0.9613, 'test_face': -5.6812, 'test_kodak': 0.9621, 'test_text': 0.9298} RMSE: {'test_clic': 0.0612, 'test_face': 0.2662, 'test_kodak': 0.0481, 'test_text': 0.0684}
+[without jpeg50_bpp (6 features, log1p)] Lasso      nested-CV R2 = 0.9739 +- 0.0017 | held-out R2: {'test_clic': 0.9613, 'test_face': -5.6794, 'test_kodak': 0.9621, 'test_text': 0.9298} RMSE: {'test_clic': 0.0612, 'test_face': 0.2662, 'test_kodak': 0.0481, 'test_text': 0.0684}
+[without jpeg50_bpp (6 features, log1p)] ElasticNet nested-CV R2 = 0.9739 +- 0.0017 | held-out R2: {'test_clic': 0.9613, 'test_face': -5.6807, 'test_kodak': 0.9621, 'test_text': 0.9298} RMSE: {'test_clic': 0.0612, 'test_face': 0.2662, 'test_kodak': 0.0481, 'test_text': 0.0684}
+[7 features + log_pixels, log1p] Linear     nested-CV R2 = 0.9762 +- 0.0016 | held-out R2: {'test_clic': 0.9623, 'test_face': -1.9721, 'test_kodak': 0.9712, 'test_text': 0.9455} RMSE: {'test_clic': 0.0604, 'test_face': 0.1776, 'test_kodak': 0.042, 'test_text': 0.0602}
+[7 features + log_pixels, log1p] Ridge      nested-CV R2 = 0.9762 +- 0.0016 | held-out R2: {'test_clic': 0.9623, 'test_face': -1.9726, 'test_kodak': 0.9712, 'test_text': 0.9456} RMSE: {'test_clic': 0.0604, 'test_face': 0.1776, 'test_kodak': 0.0419, 'test_text': 0.0602}
+[7 features + log_pixels, log1p] Lasso      nested-CV R2 = 0.9762 +- 0.0016 | held-out R2: {'test_clic': 0.9623, 'test_face': -1.9825, 'test_kodak': 0.9713, 'test_text': 0.9455} RMSE: {'test_clic': 0.0604, 'test_face': 0.1779, 'test_kodak': 0.0419, 'test_text': 0.0602}
+[7 features + log_pixels, log1p] ElasticNet nested-CV R2 = 0.9762 +- 0.0016 | held-out R2: {'test_clic': 0.9623, 'test_face': -1.9812, 'test_kodak': 0.9713, 'test_text': 0.9456} RMSE: {'test_clic': 0.0604, 'test_face': 0.1778, 'test_kodak': 0.0419, 'test_text': 0.0602}
+[7 features + inv_pixels + log_pixels, log1p] Linear     nested-CV R2 = 0.9763 +- 0.0016 | held-out R2: {'test_clic': 0.9629, 'test_face': 0.8131, 'test_kodak': 0.969, 'test_text': 0.9446} RMSE: {'test_clic': 0.0599, 'test_face': 0.0445, 'test_kodak': 0.0435, 'test_text': 0.0607}
+[7 features + inv_pixels + log_pixels, log1p] Ridge      nested-CV R2 = 0.9763 +- 0.0016 | held-out R2: {'test_clic': 0.9629, 'test_face': 0.8126, 'test_kodak': 0.9691, 'test_text': 0.9446} RMSE: {'test_clic': 0.06, 'test_face': 0.0446, 'test_kodak': 0.0435, 'test_text': 0.0607}
+[7 features + inv_pixels + log_pixels, log1p] Lasso      nested-CV R2 = 0.9762 +- 0.0016 | held-out R2: {'test_clic': 0.9627, 'test_face': 0.8162, 'test_kodak': 0.9696, 'test_text': 0.9444} RMSE: {'test_clic': 0.06, 'test_face': 0.0442, 'test_kodak': 0.0431, 'test_text': 0.0609}
+[7 features + inv_pixels + log_pixels, log1p] ElasticNet nested-CV R2 = 0.9763 +- 0.0016 | held-out R2: {'test_clic': 0.9628, 'test_face': 0.8156, 'test_kodak': 0.9695, 'test_text': 0.9444} RMSE: {'test_clic': 0.06, 'test_face': 0.0442, 'test_kodak': 0.0432, 'test_text': 0.0608}
+[size-aware: 7 features + inv_pixels + log_pixels + crops, log1p] Linear     nested-CV R2 = 0.9596 +- 0.0007 | held-out R2: {'test_clic': 0.9088, 'test_face': 0.7667, 'test_kodak': 0.9509, 'test_text': 0.8984} RMSE: {'test_clic': 0.0939, 'test_face': 0.0498, 'test_kodak': 0.0548, 'test_text': 0.0823}
+[size-aware: 7 features + inv_pixels + log_pixels + crops, log1p] Ridge      nested-CV R2 = 0.9596 +- 0.0007 | held-out R2: {'test_clic': 0.9088, 'test_face': 0.7676, 'test_kodak': 0.9503, 'test_text': 0.8979} RMSE: {'test_clic': 0.0939, 'test_face': 0.0497, 'test_kodak': 0.0551, 'test_text': 0.0825}
+[size-aware: 7 features + inv_pixels + log_pixels + crops, log1p] Lasso      nested-CV R2 = 0.9596 +- 0.0007 | held-out R2: {'test_clic': 0.9086, 'test_face': 0.7676, 'test_kodak': 0.9518, 'test_text': 0.8996} RMSE: {'test_clic': 0.0941, 'test_face': 0.0496, 'test_kodak': 0.0543, 'test_text': 0.0818}
+[size-aware: 7 features + inv_pixels + log_pixels + crops, log1p] ElasticNet nested-CV R2 = 0.9596 +- 0.0007 | held-out R2: {'test_clic': 0.9088, 'test_face': 0.7669, 'test_kodak': 0.9511, 'test_text': 0.8986} RMSE: {'test_clic': 0.094, 'test_face': 0.0497, 'test_kodak': 0.0547, 'test_text': 0.0822}
+best overall (max-min held-out R2): {'variant': '7 features + inv_pixels + log_pixels, log1p', 'name': 'Lasso', 'worst_heldout_r2': 0.8162, 'cv_r2_mean': 0.9762, 'heldout_test_r2': {'test_clic': 0.9627, 'test_face': 0.8162, 'test_kodak': 0.9696, 'test_text': 0.9444}, 'selection': 'max over (variant, model) of min held-out R2'}
+best (guide variant): {'name': 'Linear', 'cv_r2_mean': 0.9543, 'cv_r2_std': 0.0024} | target >= 0.6: True
+Lasso coefficients: {'grad_mean': 0.2067, 'lap_var': -0.06, 'entropy': 0.0078, 'edge_density': 0.0009, 'colorfulness': 0.0092, 'brightness': 0.0061, 'jpeg50_bpp': 0.1728}

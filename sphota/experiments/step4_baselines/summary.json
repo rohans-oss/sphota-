@@ -1,0 +1,20 @@
+{
+  "pca_variance": {
+    "components_for_90pct": 2,
+    "components_for_95pct": 6,
+    "components_for_99pct": 29,
+    "first_component_pct": 87.85205841064453,
+    "top8_pct": 95.85297393798828,
+    "top16_pct": 97.72005462646484
+  },
+  "bd_rate_vs_jpeg_psnr": {
+    "PCA-16": -6.2,
+    "PCA-64": 3.6,
+    "VQ": 29.4
+  },
+  "points": {
+    "PCA-16": 7,
+    "PCA-64": 7,
+    "VQ": 4
+  }
+}

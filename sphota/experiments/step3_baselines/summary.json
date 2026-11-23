@@ -1,0 +1,171 @@
+{
+  "kodak": {
+    "images": 24,
+    "size_floor": {
+      "JPEG": {
+        "min_bytes_mean": 8507.625,
+        "min_bpp_mean": 0.17308807373046875,
+        "min_bpp_min": 0.15012613932291666,
+        "min_bpp_max": 0.24845377604166666,
+        "quality_at_floor": 1
+      },
+      "WEBP": {
+        "min_bytes_mean": 5337.166666666667,
+        "min_bpp_mean": 0.10858493381076388,
+        "min_bpp_min": 0.058797200520833336,
+        "min_bpp_max": 0.22639973958333334,
+        "quality_at_floor": 0
+      }
+    },
+    "binary_search_jpeg": {
+      "0.05": {
+        "mean_bpp_achieved": 0.17308807373046875,
+        "mean_quality": 1.0,
+        "fraction_reachable": 0.0
+      },
+      "0.1": {
+        "mean_bpp_achieved": 0.17308807373046875,
+        "mean_quality": 1.0,
+        "fraction_reachable": 0.0
+      },
+      "0.2": {
+        "mean_bpp_achieved": 0.20293172200520834,
+        "mean_quality": 4.458333333333333,
+        "fraction_reachable": 0.875
+      },
+      "0.5": {
+        "mean_bpp_achieved": 0.500289069281684,
+        "mean_quality": 23.0,
+        "fraction_reachable": 1.0
+      },
+      "1.0": {
+        "mean_bpp_achieved": 0.998836941189236,
+        "mean_quality": 58.208333333333336,
+        "fraction_reachable": 1.0
+      }
+    },
+    "mean_curves": [
+      {
+        "method": "JPEG",
+        "quality": 2,
+        "bpp": 0.1732,
+        "psnr": 21.477,
+        "msssim": 0.7153,
+        "lpips": 0.5796
+      },
+      {
+        "method": "JPEG",
+        "quality": 5,
+        "bpp": 0.2212,
+        "psnr": 23.8522,
+        "msssim": 0.8071,
+        "lpips": 0.4652
+      },
+      {
+        "method": "JPEG",
+        "quality": 10,
+        "bpp": 0.3266,
+        "psnr": 26.6718,
+        "msssim": 0.8942,
+        "lpips": 0.3231
+      },
+      {
+        "method": "JPEG",
+        "quality": 20,
+        "bpp": 0.5083,
+        "psnr": 29.1445,
+        "msssim": 0.9457,
+        "lpips": 0.1969
+      },
+      {
+        "method": "JPEG",
+        "quality": 30,
+        "bpp": 0.6598,
+        "psnr": 30.4915,
+        "msssim": 0.9632,
+        "lpips": 0.1411
+      },
+      {
+        "method": "JPEG",
+        "quality": 50,
+        "bpp": 0.9055,
+        "psnr": 32.1738,
+        "msssim": 0.9769,
+        "lpips": 0.091
+      },
+      {
+        "method": "JPEG",
+        "quality": 70,
+        "bpp": 1.2388,
+        "psnr": 33.9167,
+        "msssim": 0.9847,
+        "lpips": 0.0568
+      },
+      {
+        "method": "JPEG",
+        "quality": 90,
+        "bpp": 2.3463,
+        "psnr": 38.034,
+        "msssim": 0.9933,
+        "lpips": 0.015
+      },
+      {
+        "method": "WEBP",
+        "quality": 1,
+        "bpp": 0.1653,
+        "psnr": 27.185,
+        "msssim": 0.9014,
+        "lpips": 0.3581
+      },
+      {
+        "method": "WEBP",
+        "quality": 5,
+        "bpp": 0.2344,
+        "psnr": 28.3284,
+        "msssim": 0.9257,
+        "lpips": 0.2852
+      },
+      {
+        "method": "WEBP",
+        "quality": 10,
+        "bpp": 0.2963,
+        "psnr": 29.1512,
+        "msssim": 0.9396,
+        "lpips": 0.2344
+      },
+      {
+        "method": "WEBP",
+        "quality": 25,
+        "bpp": 0.4608,
+        "psnr": 30.9392,
+        "msssim": 0.9602,
+        "lpips": 0.1556
+      },
+      {
+        "method": "WEBP",
+        "quality": 50,
+        "bpp": 0.7218,
+        "psnr": 33.2376,
+        "msssim": 0.9751,
+        "lpips": 0.0987
+      },
+      {
+        "method": "WEBP",
+        "quality": 75,
+        "bpp": 0.9984,
+        "psnr": 35.1042,
+        "msssim": 0.9832,
+        "lpips": 0.0682
+      },
+      {
+        "method": "WEBP",
+        "quality": 90,
+        "bpp": 2.0104,
+        "psnr": 39.557,
+        "msssim": 0.9933,
+        "lpips": 0.0194
+      }
+    ],
+    "plot": "report\\figures\\rd_kodak.png"
+  }
+}

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+data/raw/*
+!data/raw/.gitkeep
+*.pt
+*.pth
+*.ckpt
+*.tsi
+*.sphota
+# Raw datasets (~43 GB) are re-created with: python scripts/prepare_data.py --stage download
+
+# decoded-image cache (about 41 GB, rebuilt by scripts/build_cache.py)
+data/cache/
+*.u8

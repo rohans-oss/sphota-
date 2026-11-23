@@ -1,0 +1,66 @@
+Datasets to fetch:
+  - kodak              ~ 0.02 GB  Kodak PhotoCD, 24 images 768x512 (test only)
+  - div2k_valid        ~ 0.45 GB  DIV2K validation, 100 images (used as our val split)
+  - clic_pro_valid     ~ 0.13 GB  CLIC 2020 professional valid (stand-in for the test split, which is not public)
+  - clic_mobile_valid  ~ 0.24 GB  CLIC 2020 mobile valid (stand-in for the test split)
+  - celebahq           ~ 0.20 GB  CelebA-HQ 256x256 validation shard; 500 faces
+  - textocr            ~ 0.97 GB  TextOCR test images (scene text); 500 sampled
+  - div2k_train        ~ 3.50 GB  DIV2K train, 800 images 2K res
+  - clic_pro_train     ~ 2.00 GB  CLIC 2020 professional train
+  - clic_mobile_train  ~ 4.00 GB  CLIC 2020 mobile train
+  - flickr2k           ~11.60 GB  Flickr2K, 2650 images (HF mirror of the EDSR release)
+[done] kodak: 24 images in 1.6s
+[done] clic_pro_valid: 41 images in 5.9s
+[done] clic_mobile_valid: 61 images in 9.1s
+[done] textocr: 500 images in 19.4s
+[    20s] downloading:
+  professional_train_2020.zip       579/2003 MB  (28.9%)   0.00 MB/s
+  DIV2K_train_HR.zip                552/3531 MB  (15.6%)   0.00 MB/s
+  mobile_train_2020.zip             524/4043 MB  (13.0%)   0.00 MB/s
+  Flickr2K.zip                      856/11645 MB  ( 7.3%)   0.00 MB/s
+[done] div2k_valid: 100 images in 20.7s
+[done] celebahq: 500 images in 35.0s
+[    40s] downloading:
+  professional_train_2020.zip       987/2003 MB  (49.3%)  20.39 MB/s
+  DIV2K_train_HR.zip                953/3531 MB  (27.0%)  20.08 MB/s
+  mobile_train_2020.zip             928/4043 MB  (23.0%)  20.19 MB/s
+  Flickr2K.zip                     2343/11645 MB  (20.1%)  74.34 MB/s
+[    60s] downloading:
+  professional_train_2020.zip      1702/2003 MB  (84.9%)  35.76 MB/s
+  DIV2K_train_HR.zip               1657/3531 MB  (46.9%)  35.18 MB/s
+  mobile_train_2020.zip            1628/4043 MB  (40.3%)  35.02 MB/s
+  Flickr2K.zip                     4103/11645 MB  (35.2%)  88.03 MB/s
+[    80s] downloading:
+  DIV2K_train_HR.zip               2280/3531 MB  (64.6%)  31.14 MB/s
+  mobile_train_2020.zip            2258/4043 MB  (55.8%)  31.46 MB/s
+  Flickr2K.zip                     6020/11645 MB  (51.7%)  95.84 MB/s
+[done] clic_pro_train: 585 images in 91.8s
+[   100s] downloading:
+  DIV2K_train_HR.zip               2901/3531 MB  (82.2%)  31.09 MB/s
+  mobile_train_2020.zip            2870/4043 MB  (71.0%)  30.62 MB/s
+  Flickr2K.zip                     7094/11645 MB  (60.9%)  53.69 MB/s
+[   120s] downloading:
+  DIV2K_train_HR.zip               3358/3531 MB  (95.1%)  22.81 MB/s
+  mobile_train_2020.zip            3314/4043 MB  (82.0%)  22.18 MB/s
+  Flickr2K.zip                     8884/11645 MB  (76.3%)  89.50 MB/s
+[   140s] downloading:
+  Flickr2K.zip                    11501/11645 MB  (98.8%)  130.86 MB/s
+[done] clic_mobile_train: 1048 images in 217.0s
+[done] div2k_train: 800 images in 225.5s
+[done] flickr2k: 2650 images in 296.4s
+{
+  "train": 4909,
+  "val": 100,
+  "test_kodak": 24,
+  "test_clic": 102,
+  "test_text": 500,
+  "test_face": 500
+}
+leakage: {'train&val': 0, 'train&test_kodak': 0, 'train&test_clic': 0, 'train&test_text': 0, 'train&test_face': 0} | targets: {'train_ge_3000': True, 'no_test_in_train': True}
+   102 data/processed/test_clic.txt
+   500 data/processed/test_face.txt
+    24 data/processed/test_kodak.txt
+   500 data/processed/test_text.txt
+  4909 data/processed/train.txt
+   100 data/processed/val.txt
+  6135 total

@@ -1,0 +1,4 @@
+jpeg_q1_bytes=9383
+jpeg_q1_bpp=0.191
+jpeg_q75_bytes=92491
+target_0.05bpp_bytes=2458

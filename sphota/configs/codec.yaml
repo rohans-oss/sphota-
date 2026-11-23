@@ -1,0 +1,20 @@
+# Codec settings (Step 7). Reference values used by scripts/train_all_lambdas.py defaults
+# (the scripts take these as command-line flags; this file documents the intended full-scale run).
+model:
+  N: 128            # hidden width
+  M: 192            # latent channels, at 1/16 resolution
+  K: 3              # Gaussian-mixture components (K = 1 is the ablation)
+  scale_min: 0.11   # sigma floor of the discretised Gaussians
+lambdas: [0.0018, 0.0035, 0.0067, 0.0130, 0.0250, 0.0483]   # 0.0018 = tiny-mode base layer, 0.0483 = protected regions
+training:
+  base_lambda: 0.0130
+  base_iters: 150000          # full run for the base lambda
+  finetune_iters: 50000       # the other five lambdas start from the base checkpoint
+  batch: 8
+  crop: 256
+  lr: 1.0e-4                  # x0.1 at 90% of the iterations
+  aux_lr: 1.0e-3              # entropy-bottleneck quantiles
+  grad_clip: 1.0
+  checkpoint_every: 5000
+ablation:
+  k1_lambdas: [0.0130, 0.0035]

@@ -1,0 +1,530 @@
+{
+  "per_dataset": {
+    "celebahq": {
+      "images": 500,
+      "width_min_med_max": [
+        256,
+        256,
+        256
+      ],
+      "height_min_med_max": [
+        256,
+        256,
+        256
+      ],
+      "megapixels_mean": 0.07,
+      "aspect_median": 1.0,
+      "portrait_pct": 0.0,
+      "file_MB_total": 48.5,
+      "orig_bpp_median": 11.76,
+      "luminance_mean": 113.8,
+      "luminance_std_mean": 62.8,
+      "sharpness_p10_p50_p90": [
+        449.9,
+        1016.2,
+        2590.8
+      ],
+      "colorfulness_mean": 45.5,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 500
+      }
+    },
+    "clic_mobile_train": {
+      "images": 1048,
+      "width_min_med_max": [
+        240,
+        2000,
+        2048
+      ],
+      "height_min_med_max": [
+        228,
+        1512,
+        2048
+      ],
+      "megapixels_mean": 2.62,
+      "aspect_median": 1.333,
+      "portrait_pct": 34.1,
+      "file_MB_total": 4044.8,
+      "orig_bpp_median": 11.31,
+      "luminance_mean": 104.6,
+      "luminance_std_mean": 55.9,
+      "sharpness_p10_p50_p90": [
+        324.5,
+        1063.5,
+        2980.5
+      ],
+      "colorfulness_mean": 38.8,
+      "grayscale": 0,
+      "below_256px": 2,
+      "formats": {
+        "png": 1048
+      }
+    },
+    "clic_mobile_valid": {
+      "images": 61,
+      "width_min_med_max": [
+        996,
+        1632,
+        2048
+      ],
+      "height_min_med_max": [
+        756,
+        1512,
+        2048
+      ],
+      "megapixels_mean": 2.63,
+      "aspect_median": 1.333,
+      "portrait_pct": 34.4,
+      "file_MB_total": 236.6,
+      "orig_bpp_median": 11.36,
+      "luminance_mean": 104.5,
+      "luminance_std_mean": 58.1,
+      "sharpness_p10_p50_p90": [
+        415.1,
+        1239.2,
+        2573.5
+      ],
+      "colorfulness_mean": 37.8,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 61
+      }
+    },
+    "clic_pro_train": {
+      "images": 585,
+      "width_min_med_max": [
+        384,
+        2048,
+        2048
+      ],
+      "height_min_med_max": [
+        294,
+        1361,
+        2048
+      ],
+      "megapixels_mean": 2.33,
+      "aspect_median": 1.5,
+      "portrait_pct": 6.3,
+      "file_MB_total": 2004.5,
+      "orig_bpp_median": 11.93,
+      "luminance_mean": 110.7,
+      "luminance_std_mean": 55.2,
+      "sharpness_p10_p50_p90": [
+        310.6,
+        1078.6,
+        2903.7
+      ],
+      "colorfulness_mean": 36.7,
+      "grayscale": 25,
+      "below_256px": 0,
+      "formats": {
+        "png": 585
+      }
+    },
+    "clic_pro_valid": {
+      "images": 41,
+      "width_min_med_max": [
+        512,
+        2048,
+        2048
+      ],
+      "height_min_med_max": [
+        384,
+        1360,
+        1725
+      ],
+      "megapixels_mean": 2.23,
+      "aspect_median": 1.5,
+      "portrait_pct": 2.4,
+      "file_MB_total": 134.9,
+      "orig_bpp_median": 12.19,
+      "luminance_mean": 111.8,
+      "luminance_std_mean": 56.0,
+      "sharpness_p10_p50_p90": [
+        341.9,
+        1173.9,
+        2934.1
+      ],
+      "colorfulness_mean": 39.8,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 41
+      }
+    },
+    "div2k_train": {
+      "images": 800,
+      "width_min_med_max": [
+        1116,
+        2040,
+        2040
+      ],
+      "height_min_med_max": [
+        648,
+        1356,
+        2040
+      ],
+      "megapixels_mean": 2.79,
+      "aspect_median": 1.504,
+      "portrait_pct": 10.9,
+      "file_MB_total": 3533.8,
+      "orig_bpp_median": 12.68,
+      "luminance_mean": 111.3,
+      "luminance_std_mean": 54.8,
+      "sharpness_p10_p50_p90": [
+        701.7,
+        1878.9,
+        4054.6
+      ],
+      "colorfulness_mean": 46.7,
+      "grayscale": 4,
+      "below_256px": 0,
+      "formats": {
+        "png": 800
+      }
+    },
+    "div2k_valid": {
+      "images": 100,
+      "width_min_med_max": [
+        1356,
+        2040,
+        2040
+      ],
+      "height_min_med_max": [
+        816,
+        1356,
+        2040
+      ],
+      "megapixels_mean": 2.84,
+      "aspect_median": 1.504,
+      "portrait_pct": 10.0,
+      "file_MB_total": 449.5,
+      "orig_bpp_median": 12.6,
+      "luminance_mean": 109.0,
+      "luminance_std_mean": 53.1,
+      "sharpness_p10_p50_p90": [
+        986.1,
+        1990.4,
+        3644.0
+      ],
+      "colorfulness_mean": 44.1,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 100
+      }
+    },
+    "flickr2k": {
+      "images": 2650,
+      "width_min_med_max": [
+        1020,
+        2040,
+        2040
+      ],
+      "height_min_med_max": [
+        816,
+        1356,
+        2040
+      ],
+      "megapixels_mean": 2.76,
+      "aspect_median": 1.504,
+      "portrait_pct": 13.1,
+      "file_MB_total": 11657.1,
+      "orig_bpp_median": 12.6,
+      "luminance_mean": 115.3,
+      "luminance_std_mean": 54.9,
+      "sharpness_p10_p50_p90": [
+        699.7,
+        1878.6,
+        4012.8
+      ],
+      "colorfulness_mean": 46.6,
+      "grayscale": 3,
+      "below_256px": 0,
+      "formats": {
+        "png": 2650
+      }
+    },
+    "kodak": {
+      "images": 24,
+      "width_min_med_max": [
+        512,
+        768,
+        768
+      ],
+      "height_min_med_max": [
+        512,
+        512,
+        768
+      ],
+      "megapixels_mean": 0.39,
+      "aspect_median": 1.5,
+      "portrait_pct": 25.0,
+      "file_MB_total": 15.4,
+      "orig_bpp_median": 12.61,
+      "luminance_mean": 110.4,
+      "luminance_std_mean": 45.3,
+      "sharpness_p10_p50_p90": [
+        533.1,
+        1099.5,
+        2709.6
+      ],
+      "colorfulness_mean": 39.2,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 24
+      }
+    },
+    "textocr": {
+      "images": 500,
+      "width_min_med_max": [
+        419,
+        1024,
+        3585
+      ],
+      "height_min_med_max": [
+        280,
+        768,
+        2625
+      ],
+      "megapixels_mean": 0.79,
+      "aspect_median": 1.333,
+      "portrait_pct": 20.4,
+      "file_MB_total": 142.2,
+      "orig_bpp_median": 2.35,
+      "luminance_mean": 122.6,
+      "luminance_std_mean": 59.2,
+      "sharpness_p10_p50_p90": [
+        417.5,
+        1245.7,
+        2703.0
+      ],
+      "colorfulness_mean": 44.0,
+      "grayscale": 10,
+      "below_256px": 0,
+      "formats": {
+        "jpg": 500
+      }
+    }
+  },
+  "per_split": {
+    "train": {
+      "images": 4909,
+      "width_min_med_max": [
+        300,
+        2040,
+        2048
+      ],
+      "height_min_med_max": [
+        294,
+        1356,
+        2048
+      ],
+      "megapixels_mean": 2.7,
+      "aspect_median": 1.5,
+      "portrait_pct": 16.5,
+      "file_MB_total": 20579.8,
+      "orig_bpp_median": 12.28,
+      "luminance_mean": 112.2,
+      "luminance_std_mean": 55.2,
+      "sharpness_p10_p50_p90": [
+        524.3,
+        1621.2,
+        3794.1
+      ],
+      "colorfulness_mean": 44.1,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 4909
+      }
+    },
+    "val": {
+      "images": 100,
+      "width_min_med_max": [
+        1356,
+        2040,
+        2040
+      ],
+      "height_min_med_max": [
+        816,
+        1356,
+        2040
+      ],
+      "megapixels_mean": 2.84,
+      "aspect_median": 1.504,
+      "portrait_pct": 10.0,
+      "file_MB_total": 449.5,
+      "orig_bpp_median": 12.6,
+      "luminance_mean": 109.0,
+      "luminance_std_mean": 53.1,
+      "sharpness_p10_p50_p90": [
+        986.1,
+        1990.4,
+        3644.0
+      ],
+      "colorfulness_mean": 44.1,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 100
+      }
+    },
+    "test_kodak": {
+      "images": 24,
+      "width_min_med_max": [
+        512,
+        768,
+        768
+      ],
+      "height_min_med_max": [
+        512,
+        512,
+        768
+      ],
+      "megapixels_mean": 0.39,
+      "aspect_median": 1.5,
+      "portrait_pct": 25.0,
+      "file_MB_total": 15.4,
+      "orig_bpp_median": 12.61,
+      "luminance_mean": 110.4,
+      "luminance_std_mean": 45.3,
+      "sharpness_p10_p50_p90": [
+        533.1,
+        1099.5,
+        2709.6
+      ],
+      "colorfulness_mean": 39.2,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 24
+      }
+    },
+    "test_clic": {
+      "images": 102,
+      "width_min_med_max": [
+        512,
+        2000,
+        2048
+      ],
+      "height_min_med_max": [
+        384,
+        1365,
+        2048
+      ],
+      "megapixels_mean": 2.47,
+      "aspect_median": 1.335,
+      "portrait_pct": 21.6,
+      "file_MB_total": 371.5,
+      "orig_bpp_median": 11.45,
+      "luminance_mean": 107.4,
+      "luminance_std_mean": 57.3,
+      "sharpness_p10_p50_p90": [
+        389.7,
+        1202.4,
+        2626.5
+      ],
+      "colorfulness_mean": 38.6,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 102
+      }
+    },
+    "test_text": {
+      "images": 500,
+      "width_min_med_max": [
+        419,
+        1024,
+        3585
+      ],
+      "height_min_med_max": [
+        280,
+        768,
+        2625
+      ],
+      "megapixels_mean": 0.79,
+      "aspect_median": 1.333,
+      "portrait_pct": 20.4,
+      "file_MB_total": 142.2,
+      "orig_bpp_median": 2.35,
+      "luminance_mean": 122.6,
+      "luminance_std_mean": 59.2,
+      "sharpness_p10_p50_p90": [
+        417.5,
+        1245.7,
+        2703.0
+      ],
+      "colorfulness_mean": 44.0,
+      "grayscale": 10,
+      "below_256px": 0,
+      "formats": {
+        "jpg": 500
+      }
+    },
+    "test_face": {
+      "images": 500,
+      "width_min_med_max": [
+        256,
+        256,
+        256
+      ],
+      "height_min_med_max": [
+        256,
+        256,
+        256
+      ],
+      "megapixels_mean": 0.07,
+      "aspect_median": 1.0,
+      "portrait_pct": 0.0,
+      "file_MB_total": 48.5,
+      "orig_bpp_median": 11.76,
+      "luminance_mean": 113.8,
+      "luminance_std_mean": 62.8,
+      "sharpness_p10_p50_p90": [
+        449.9,
+        1016.2,
+        2590.8
+      ],
+      "colorfulness_mean": 45.5,
+      "grayscale": 0,
+      "below_256px": 0,
+      "formats": {
+        "png": 500
+      }
+    }
+  },
+  "filter_log": {
+    "dropped": {
+      "val_small": 0,
+      "val_gray": 0,
+      "val_dup_of_held_out": 0,
+      "val_dup_internal": 0,
+      "train_small": 2,
+      "train_gray": 32,
+      "train_dup_of_held_out": 14,
+      "train_dup_internal": 126
+    },
+    "corrupt": 0,
+    "val_before": 100,
+    "val_after": 100,
+    "train_before": 5083,
+    "train_after": 4909
+  },
+  "leakage_check": {
+    "train&val": 0,
+    "train&test_kodak": 0,
+    "train&test_clic": 0,
+    "train&test_text": 0,
+    "train&test_face": 0
+  },
+  "targets": {
+    "train_ge_3000": true,
+    "no_test_in_train": true
+  }
+}
