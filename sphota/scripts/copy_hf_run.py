@@ -44,7 +44,9 @@ def main():
         snapshot_download(a.old, repo_type=a.type, token=old_t, local_dir=tmp, ignore_patterns=skip or None)
         api.create_repo(a.new, repo_type=a.type, private=True, exist_ok=True)
         print(f"uploading to {a.new} ...", flush=True)
-        if a.type == "dataset":                                    # thousands of files: resumable, batched commits
+        if a.type == "dataset" and not hasattr(api, "upload_large_folder"):        # old huggingface_hub: plain (not resumable) upload
+            api.upload_folder(repo_id=a.new, repo_type="dataset", folder_path=tmp, ignore_patterns=[".cache/*"])
+        elif a.type == "dataset":                                  # thousands of files: resumable, batched commits
             api.upload_large_folder(repo_id=a.new, repo_type="dataset", folder_path=tmp, ignore_patterns=[".cache/*"])
         else:
             api.upload_folder(repo_id=a.new, repo_type="model", folder_path=tmp, ignore_patterns=skip or None,
