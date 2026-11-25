@@ -251,6 +251,33 @@ def test_ablation_runner_evaluates_the_half_budget_checkpoint_too(tmp_path):
     assert (out / "base" / "snapshot_2.pt").exists() and (out / "summary_2.csv").exists() and (out / "summary.csv").exists()
 
 
+def test_ablation_runner_does_not_evaluate_a_finished_run_twice(tmp_path):
+    import subprocess
+    import sys
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    lst = _images(tmp_path, n=3, size=64)
+    codec_path, _ = _codec_ckpt(tmp_path)
+    out = tmp_path / "abl"
+    cmd = [sys.executable, str(root / "scripts" / "run_train_ablations.py"), "--codec", codec_path, "--out", str(out),
+           "--runs", "base", "--iters", "4", "--snapshots", "2", "--batch", "2", "--crop", "64",
+           "--channels", *map(str, SMALL), "--workers", "0", "--ckpt-every", "2", "--train-list", lst,
+           "--test-list", lst, "--eval-images", "2", "--eval-crop", "64", "--steps", "2", "--device", "cpu"]
+    r1 = subprocess.run(cmd, capture_output=True, text=True, cwd=root)
+    assert r1.returncode == 0, r1.stderr[-1500:]
+    assert "earlier session" not in r1.stdout
+    stamp = (out / "base" / "eval.csv").stat().st_mtime_ns
+    r2 = subprocess.run(cmd, capture_output=True, text=True, cwd=root)                       # the restarted session
+    assert r2.returncode == 0, r2.stderr[-1500:]
+    assert r2.stdout.count("earlier session") == 2                                           # final and the snapshot: both reused
+    assert (out / "base" / "eval.csv").stat().st_mtime_ns == stamp                           # nothing decoded, nothing rewritten
+    assert (out / "summary_by_step.csv").exists()
+    r3 = subprocess.run(cmd + ["--eval-images", "1"], capture_output=True, text=True, cwd=root)   # another image set: decoded again
+    assert r3.returncode == 0 and "earlier session" not in r3.stdout
+    r4 = subprocess.run(cmd + ["--reeval"], capture_output=True, text=True, cwd=root)
+    assert r4.returncode == 0 and "earlier session" not in r4.stdout
+
+
 def test_resume_without_any_snapshot_keeps_the_resumed_state_as_a_snapshot(tmp_path):
     lst = _images(tmp_path)
     codec_path, _ = _codec_ckpt(tmp_path)
