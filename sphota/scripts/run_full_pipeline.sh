@@ -66,7 +66,7 @@ D_SNAP=""; ABL_SNAP=""                                              # steps at w
 # runs. Only the number of diffusion iterations (200k -> 60k, LR cosine-decayed to 0 at 60k), the ablation runs (20k -> 5k) and the
 # evaluation sample counts shrink. Snapshots at 30k / 60k (main model) and 2.5k / 5k (ablations) show what the extra steps would buy
 # (scripts/compare_checkpoints.py). Any single value can still be overridden: TS_D_IT, TS_ABL_IT, TS_D_SNAPSHOTS, TS_ABL_SNAPSHOTS.
-if [ "${SMOKE:-0}" != "1" ] && [ "${TS_BUDGET:-}" = "24h" ]; then
+if [ "${SMOKE:-0}" != "1" ] && { [ "${TS_BUDGET:-}" = "24h" ] || [ "${TS_BUDGET:-}" = "24h-small" ]; }; then
   D_IT=60000; ABL_IT=5000; D_SNAP="30000 60000"; ABL_SNAP="2500 5000"
   N_IMG=200; CR_MAX=500; N_TBL=600; CR_STEPS=$MAIN_STEPS
 fi
@@ -74,7 +74,13 @@ fi
 [ -n "${TS_ABL_IT:-}" ] && ABL_IT=$TS_ABL_IT
 [ -n "${TS_D_SNAPSHOTS:-}" ] && D_SNAP=$TS_D_SNAPSHOTS
 [ -n "${TS_ABL_SNAPSHOTS:-}" ] && ABL_SNAP=$TS_ABL_SNAPSHOTS
-ABL_SNAP=""; N_TEXT=10; N_FACE=10; N_IMG=6; CR_MAX=100; TUNE_N=4; MAIN_STEPS=25; CR_STEPS=$MAIN_STEPS; DE_N=8; ABL_EVAL_N=8; BS_N=12
+# TS_BUDGET=24h-small (kaggle_run.py --budget 24h-small): the 24h preset plus a much smaller evaluation (fewer images, 25 steps), no 2.5k ablation
+# checkpoint evaluation, no training-image cache. Every chained notebook inherits the flag.
+DE_N=""; DE_SWEEP=""; BS_N=""; ABL_EVAL_N=24
+if [ "${SMOKE:-0}" != "1" ] && [ "${TS_BUDGET:-}" = "24h-small" ]; then
+  ABL_SNAP=""; N_TEXT=10; N_FACE=10; N_IMG=6; CR_MAX=100; TUNE_N=4; MAIN_STEPS=25; CR_STEPS=$MAIN_STEPS
+  DE_N=8; DE_SWEEP="10 25"; BS_N=12; ABL_EVAL_N=8
+fi
 mkdir -p "$EXP/.done" "$EXP/logs" "$FIGS" "$RES"
 # Speed-ups that are used only after a parity check passed (they read these result files; without them everything stays fp32 as in the
 # guide): fp16 codec convolutions after `STAGES=amp_parity` (scripts/amp_parity.py), fp16 / batched U-Net decoding after the eval_parity stage.
@@ -179,7 +185,7 @@ stage_bitstream() {
   if want bitstream; then                                         # Step 8: real .sphota files, bit-exact decode, header counted
     need 20
     require "$LO" codec
-    run bitstream $PY scripts/eval_bitstream.py --exp "$CODEC" --out "$EXP/step8_bitstream" --figs "$FIGS" --device cpu --limit $BS_N
+    run bitstream $PY scripts/eval_bitstream.py --exp "$CODEC" --out "$EXP/step8_bitstream" --figs "$FIGS" --device cpu ${BS_N:+--limit $BS_N}
     done_ bitstream
   fi
 }
@@ -223,7 +229,7 @@ stage_diffusion_eval() {
     need 45
     require "$UNET" diffusion
     run diffusion_eval $PY scripts/eval_diffusion.py --codec "$LO" --diffusion "$UNET" --out "$DIFF/eval" --figs "$FIGS" \
-        --steps $STEPS --main-steps $MAIN_STEPS --steps-sweep 10 25 --limit $DE_N --device $DEV --fid
+        --steps $STEPS --main-steps $MAIN_STEPS ${DE_SWEEP:+--steps-sweep $DE_SWEEP} ${DE_N:+--limit $DE_N} --device $DEV --fid
     done_ diffusion_eval
   fi
 }
@@ -340,6 +346,7 @@ stage_report() {
 # ============================================================================================ cache, job graph, chains
 ensure_cache() {                      # decode the training images once (truesight/image_cache.py): same data, no PNG decoding per step
   [ -z "${TS_INNER:-}" ] || return 0
+  [ "${TS_BUDGET:-}" = "24h-small" ] && return 0      # all training is finished in the small run: the cache would only cost time
   [ "${SMOKE:-0}" = "1" ] || [ "${NO_CACHE:-0}" = "1" ] && return 0
   case " $STAGES " in *" ae "*|*" step9 "*|*" codec "*|*" codec_ablation "*|*" diffusion "*|*" train_ablations "*) ;; *) return 0;; esac
   [ -s data/processed/train.txt ] || return 0

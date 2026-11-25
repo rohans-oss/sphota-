@@ -26,7 +26,7 @@ def chain_config(a):
     from truesight import chain
     reset = None if a.quota_reset_dow is None else (a.quota_reset_dow, a.quota_reset_hour)
     return chain.ChainConfig(owner=a.chain_owner or "", gpu_slug=a.chain_gpu_slug, cpu_slug=a.chain_cpu_slug, wait_slug=a.chain_wait_slug,
-                             kind=a.chain_kind, count=a.chain_count, max_chain=a.max_chain, repo=a.chain_repo,
+                             kind=a.chain_kind, count=a.chain_count, max_chain=a.max_chain, repo=a.chain_repo, branch=a.chain_branch,
                              machine_shape=a.machine_shape, reset=reset, wait_until=a.wait_until, weekly_quota=a.weekly_quota,
                              quota_hours=a.quota_hours, hours_limit=a.hours, dead_hours=a.dead_session_hours)
 
@@ -39,7 +39,7 @@ def main():
     ap.add_argument("--data-input", default=None, help="folder of an attached Kaggle dataset containing raw/ (and processed/)")
     ap.add_argument("--data-dir", default=None, help="roomy scratch folder to use as data/ (Kaggle: /kaggle/temp/sphota_data)")
     ap.add_argument("--stages", default=None, help='only these stages, for example "diffusion diffusion_eval"')
-    ap.add_argument("--budget", choices=["24h"], default=None, help="24h = fit the run into about 24 GPU-hours (60k diffusion steps, 5k ablations, "
+    ap.add_argument("--budget", choices=["24h", "24h-small"], default=None, help="24h = fit the run into about 24 GPU-hours (60k diffusion steps, 5k ablations, "
                     "fewer evaluation samples, snapshots for comparison; see BUDGET_24H.md). Part of the arguments of chained notebooks, so every session uses it")
     ap.add_argument("--smoke", action="store_true", help="tiny settings (same commands, minutes instead of days)")
     ap.add_argument("--sync-every", type=float, default=kaggle.DEFAULT_SYNC_MIN, help="minutes between uploads while running (checkpoints are written more often)")
@@ -61,6 +61,7 @@ def main():
     ch.add_argument("--chain-cpu-slug", default="sphota-data")
     ch.add_argument("--chain-wait-slug", default="sphota-wait")
     ch.add_argument("--chain-repo", default="https://github.com/MANOFHATERS/sphota.git", help="repository the next notebook clones")
+    ch.add_argument("--chain-branch", default="", help="branch the next notebook clones (default: the repository's default branch)")
     ch.add_argument("--machine-shape", default="NvidiaTeslaT4", help="machine_shape of the GPU notebook ('' to omit)")
     ch.add_argument("--wait-until", type=float, default=None, help="(wait notebooks) epoch seconds to sleep until")
     a = ap.parse_args()
