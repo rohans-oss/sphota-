@@ -230,8 +230,13 @@ def main():
                           ("diffusion", Image.fromarray((row["y"][0].permute(1, 2, 0).numpy() * 255).round().astype("uint8"))),
                           ("jpeg", base["jpeg"][i]["rec"]), ("webp", base["webp"][i]["rec"])):
                 im.save(dirs[m] / f"{i:03d}.png")
-        fid = {m: float(cfid.compute_fid(str(dirs["original"]), str(dirs[m]), mode="clean", device=device))
-               for m in ("diffusion", "coarse", "jpeg", "webp")}
+        def _fid(m):
+            try:
+                return float(cfid.compute_fid(str(dirs["original"]), str(dirs[m]), mode="clean", device=device))
+            except Exception as e:
+                print(f"FID for {m} failed ({type(e).__name__}: {e}); stored as NaN", flush=True)
+                return float("nan")
+        fid = {m: _fid(m) for m in ("diffusion", "coarse", "jpeg", "webp")}
         result["fid"] = fid
         result["fid_note"] = f"computed on only {len(items)} images: indicative, not a reliable absolute FID"
     result["checks"] = checks(summary, fid)

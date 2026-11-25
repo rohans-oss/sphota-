@@ -44,9 +44,9 @@ def cached_eval(path, files, max_images):
     except Exception:
         return None
     want = [Path(f).name for f in list(files)[:max_images]]
-    if "image" not in df.columns or df["image"].tolist() != want or not {"lpips", "psnr", "lpips_coarse", "psnr_coarse"} <= set(df.columns):
+    if "image" not in df.columns or df["image"].tolist()[:len(want)] != want or not {"lpips", "psnr", "lpips_coarse", "psnr_coarse"} <= set(df.columns):
         return None
-    return df
+    return df.head(len(want)).reset_index(drop=True)
 
 
 def main():

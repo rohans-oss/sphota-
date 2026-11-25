@@ -42,7 +42,7 @@ from .sync import Syncer, data_pull, data_push, raw_present, release_all
 DONE, PAUSED, CRASHED, NO_QUOTA, BUSY = "DONE", "PAUSED", "CRASHED", "NO_QUOTA", "BUSY"
 EXIT_NO_QUOTA = 76                       # not enough weekly GPU quota left to run a useful session
 EXIT_BUSY = 77                           # another GPU session of this run is alive: this one stops at once (no duplicate training)
-ACTIVE_STALE_S = 45 * 60                 # a session whose ledger entry was not refreshed for this long is taken to be dead
+ACTIVE_STALE_S = 3 * 60                 # a session whose ledger entry was not refreshed for this long is taken to be dead
 DEFAULT_HOURS = 11.5                     # Kaggle stops at 12 h: the last 30 minutes are for the final upload
 QUOTA_MARGIN_H = 0.5                     # kept free of the quota for the final upload and for estimate errors
 MIN_USEFUL_H = 0.25                      # below this budget a session cannot even restore the state and save it again

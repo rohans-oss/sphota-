@@ -53,7 +53,11 @@ def compute_fids(root, methods=METHODS, reference="original", fid_fn=None):
         from cleanfid import fid as cfid
 
         def fid_fn(a, b):
-            return float(cfid.compute_fid(str(a), str(b), mode="clean"))
+            try:
+                return float(cfid.compute_fid(str(a), str(b), mode="clean"))
+            except Exception as e:
+                print(f"FID failed ({type(e).__name__}: {e}); stored as NaN", flush=True)
+                return float("nan")
     return {m: float(fid_fn(root / reference, root / m)) for m in methods if (root / m).exists()}
 
 

@@ -74,6 +74,7 @@ fi
 [ -n "${TS_ABL_IT:-}" ] && ABL_IT=$TS_ABL_IT
 [ -n "${TS_D_SNAPSHOTS:-}" ] && D_SNAP=$TS_D_SNAPSHOTS
 [ -n "${TS_ABL_SNAPSHOTS:-}" ] && ABL_SNAP=$TS_ABL_SNAPSHOTS
+ABL_SNAP=""; N_TEXT=10; N_FACE=10; N_IMG=6; CR_MAX=100; TUNE_N=4; MAIN_STEPS=25; CR_STEPS=$MAIN_STEPS; DE_N=8; ABL_EVAL_N=8; BS_N=12
 mkdir -p "$EXP/.done" "$EXP/logs" "$FIGS" "$RES"
 # Speed-ups that are used only after a parity check passed (they read these result files; without them everything stays fp32 as in the
 # guide): fp16 codec convolutions after `STAGES=amp_parity` (scripts/amp_parity.py), fp16 / batched U-Net decoding after the eval_parity stage.
@@ -178,7 +179,7 @@ stage_bitstream() {
   if want bitstream; then                                         # Step 8: real .sphota files, bit-exact decode, header counted
     need 20
     require "$LO" codec
-    run bitstream $PY scripts/eval_bitstream.py --exp "$CODEC" --out "$EXP/step8_bitstream" --figs "$FIGS" --device cpu
+    run bitstream $PY scripts/eval_bitstream.py --exp "$CODEC" --out "$EXP/step8_bitstream" --figs "$FIGS" --device cpu --limit $BS_N
     done_ bitstream
   fi
 }
@@ -222,7 +223,7 @@ stage_diffusion_eval() {
     need 45
     require "$UNET" diffusion
     run diffusion_eval $PY scripts/eval_diffusion.py --codec "$LO" --diffusion "$UNET" --out "$DIFF/eval" --figs "$FIGS" \
-        --steps $STEPS --main-steps $MAIN_STEPS --device $DEV --fid
+        --steps $STEPS --main-steps $MAIN_STEPS --steps-sweep 10 25 --limit $DE_N --device $DEV --fid
     done_ diffusion_eval
   fi
 }
@@ -311,7 +312,7 @@ stage_train_ablations() {
   if want train_ablations; then                                   # A7 (linear vs cosine schedule) and A8 (Adam vs AdamW, constant vs cosine LR)
     require "$LO" codec
     run train_ablations $PY scripts/run_train_ablations.py --codec "$LO" --out "$EXP/step10_ablation" --iters $ABL_IT \
-        --batch $ABL_BATCH --channels $ABL_CH --workers $WORKERS --device $DEV --steps $STEPS \
+        --batch $ABL_BATCH --channels $ABL_CH --workers $WORKERS --device $DEV --steps $STEPS --eval-images $ABL_EVAL_N \
         ${ABL_SNAP:+--snapshots $ABL_SNAP}
     done_ train_ablations
   fi
