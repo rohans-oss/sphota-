@@ -80,8 +80,10 @@ DE_N=""; DE_SWEEP=""; BS_N=""; ABL_EVAL_N=24
 if [ "${SMOKE:-0}" != "1" ] && [ "${TS_BUDGET:-}" = "24h-small" ]; then
   ABL_SNAP=""; N_TEXT=10; N_FACE=10; N_IMG=6; CR_MAX=100; TUNE_N=4; MAIN_STEPS=25; CR_STEPS=$MAIN_STEPS
   DE_N=8; DE_SWEEP="10 25"; BS_N=12; ABL_EVAL_N=8
+  N_HALL=20; STUDY_IMG=10; N_TBL=80                    # honesty, user-study images, rate-control / recommender table
 fi
 mkdir -p "$EXP/.done" "$EXP/logs" "$FIGS" "$RES"
+[ "${TS_BUDGET:-}" = "24h-small" ] && rm -f "$EXP/.done/report"     # the small run re-builds the report after every extra stage
 # Speed-ups that are used only after a parity check passed (they read these result files; without them everything stays fp32 as in the
 # guide): fp16 codec convolutions after `STAGES=amp_parity` (scripts/amp_parity.py), fp16 / batched U-Net decoding after the eval_parity stage.
 export TS_AMP_PARITY_FILE=${TS_AMP_PARITY_FILE:-$PWD/$EXP/amp_parity.json}
@@ -376,6 +378,10 @@ chain_diffusion()        { stage_diffusion; }
 chain_train_side()       { stage_codec_ablation; stage_train_ablations; }
 chain_post_a()           { stage_codec_eval; stage_bitstream; stage_ablation_eval; stage_diffusion_eval; stage_clic_crops; stage_protect; }
 chain_post_b()           { stage_guidance; stage_honesty; stage_study_pairs; stage_intelligence; }
+if [ "${TS_BUDGET:-}" = "24h-small" ]; then            # two GPUs: the long intelligence table runs beside the study / honesty stages
+  chain_post_a() { stage_codec_eval; stage_bitstream; stage_ablation_eval; stage_diffusion_eval; stage_clic_crops; stage_protect; stage_intelligence; }
+  chain_post_b() { stage_guidance; stage_study_pairs; stage_honesty; }
+fi
 
 stage_setup
 stage_data
