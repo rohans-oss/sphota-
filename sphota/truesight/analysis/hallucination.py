@@ -138,11 +138,11 @@ def patch_table(decodes, coarse, y_hat, codec, detected_boxes=(), protected_boxe
     maps = {"seed_var": seed_variance_map(decodes, patch), "bin_violation": bin_violation_map(codec, x_hat, y_hat, patch),
             "detail_gain": lap_hat - lap_coarse, "coarse_lapvar": lap_coarse, "coarse_edge": edge_density_map(coarse, patch),
             "text_face": content_overlap_map(H, W, detected_boxes, protected_boxes, patch)}
-    X = np.stack([maps[k].numpy().ravel() for k in FEATURES], axis=1).astype(np.float64)
-    out = {"X": X, "lpips": None, "grid": tuple(maps["seed_var"].shape), "maps": {k: v.numpy() for k, v in maps.items()}}
+    X = np.stack([maps[k].detach().cpu().numpy().ravel() for k in FEATURES], axis=1).astype(np.float64)
+    out = {"X": X, "lpips": None, "grid": tuple(maps["seed_var"].shape), "maps": {k: v.detach().cpu().numpy() for k, v in maps.items()}}
     if original is not None:
         lp = (lpips_fn or spatial_lpips_map)(original.float().cpu(), x_hat)
-        out["lpips"] = to_patches(lp.float(), patch).numpy().ravel().astype(np.float64)
+        out["lpips"] = to_patches(lp.float().cpu(), patch).numpy().ravel().astype(np.float64)
     return out
 
 
